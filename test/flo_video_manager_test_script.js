@@ -1,3 +1,24 @@
+const overwite_existing_saved_video = (existing_save_arr) => {
+    const saved_arr = JSON.parse(existing_save_arr);
+    const saved_index = saved_arr.findIndex((i) => i.vid === save_obj.vid);
+    if (saved_index < 0) {
+        console.log("no saved index");
+        video_arr = [...saved_arr, save_obj];
+        return localStorage.setItem("nico_flo_saves", JSON.stringify(video_arr));
+    } else {
+        console.log("update with new");
+        const updated_video_arr = [
+            ...saved_arr.slice(0, saved_index),
+            save_obj,
+            ...saved_arr.slice(saved_index + 1),
+        ];
+        return localStorage.setItem(
+            "nico_flo_saves",
+            JSON.stringify(updated_video_arr)
+        );
+    }
+};
+
 const flo_save_video = () => {
     //Toma la información del video y el tiempo para almacenarlo
     const video_id = document.location.search.match("playing=([0-9]+)")[1];
@@ -15,30 +36,10 @@ const flo_save_video = () => {
 
     //añmacena en el local storage
     let video_arr = [];
-    const save_exist = localStorage.getItem("nico_flo_saves");
+    const existing_save_arr = localStorage.getItem("nico_flo_saves");
 
-    if (save_exist) {
-        console.log("save exist");
-        const saved_arr = JSON.parse(save_exist);
-        console.log(save_obj.vid);
-        const saved_index = saved_arr.findIndex((i) => i.vid === save_obj.vid);
-        console.log(saved_index);
-        if (saved_index < 0) {
-            console.log("no saved index");
-            video_arr = [...saved_arr, save_obj];
-            return localStorage.setItem("nico_flo_saves", JSON.stringify(video_arr));
-        } else {
-            console.log("update with new");
-            const updated_video_arr = [
-                ...saved_arr.slice(0, saved_index),
-                save_obj,
-                ...saved_arr.slice(saved_index + 1),
-            ];
-            return localStorage.setItem(
-                "nico_flo_saves",
-                JSON.stringify(updated_video_arr)
-            );
-        }
+    if (existing_save_arr) {
+        overwite_existing_saved_video(existing_save_arr);
     } else {
         video_arr = [save_obj];
         return localStorage.setItem("nico_flo_saves", JSON.stringify(video_arr));
@@ -59,12 +60,12 @@ const flo_video_manager = () => {
     const video_id = document.location.search.match("playing=([0-9]+)")[1];
     if (!video_id) return false;
 
-    const save_exist = localStorage.getItem("nico_flo_saves");
-    if (!save_exist) {
+    const existing_save_arr = localStorage.getItem("nico_flo_saves");
+    if (!existing_save_arr) {
         console.log("no existe un save flograppling");
         flo_save_video();
     } else {
-        const saved_arr = JSON.parse(save_exist);
+        const saved_arr = JSON.parse(existing_save_arr);
         const saved_index = saved_arr.find((i) => i.vid === video_id);
         if (saved_index) {
             const video_time = saved_index.time;
