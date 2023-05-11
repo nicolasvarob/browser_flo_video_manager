@@ -1,0 +1,29 @@
+{
+    "name": "Flo Video Manager",
+    "version": "0.1.0",
+    "description": "Saving Flograppling video status and watch history",
+    "permissions": ["storage"],
+    "host_permissions": ["https://*.flograppling.com/*"],
+    "background": {
+        "service_worker": "background.js"
+    },
+    "content_scripts": [{
+        "matches": ["https://*.flograppling.com/*"],
+        "js": ["contentScript.js"]
+    }],
+    "web_accesible_resources": [{
+        "resources": [
+
+        ],
+        "matches": ["https://*.flograppling.com/*"]
+    }],
+    "action": {
+        "default_icon": {
+            "16": "assets/ext-icon.png",
+            "24": "assets/ext-icon.png",
+            "32": "assets/ext-icon.png"
+        }
+    },
+    "default_title": "My Flograppling videos",
+    "default_popup": "popup.html"
+}
