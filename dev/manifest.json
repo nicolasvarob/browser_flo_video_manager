@@ -1,4 +1,5 @@
 {
+    "manifest_version": 3,
     "name": "Flo Video Manager",
     "version": "0.1.0",
     "description": "Saving Flograppling video status and watch history",
@@ -13,7 +14,8 @@
     }],
     "web_accesible_resources": [{
         "resources": [
-
+            "assets/ext-icon.png",
+            "flo_inactive_img.png"
         ],
         "matches": ["https://*.flograppling.com/*"]
     }],
@@ -22,8 +24,9 @@
             "16": "assets/ext-icon.png",
             "24": "assets/ext-icon.png",
             "32": "assets/ext-icon.png"
-        }
-    },
-    "default_title": "My Flograppling videos",
-    "default_popup": "popup.html"
+        },
+        "default_title": "My Flograppling videos",
+        "default_popup": "popup.html"
+    }
+
 }
