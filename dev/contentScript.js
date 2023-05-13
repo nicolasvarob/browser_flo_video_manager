@@ -1,5 +1,3 @@
-if (window.location.hostname === "www.flograppling.com") alert("Flograppling detected");
-
 const overwriteExistingVideo = (existing_save_arr, save_obj) => {
     const saved_arr = JSON.parse(existing_save_arr);
     const saved_index = saved_arr.findIndex((i) => i.vid === save_obj.vid);
@@ -21,7 +19,7 @@ const overwriteExistingVideo = (existing_save_arr, save_obj) => {
     }
 };
 
-const floSaveVideo = () => {
+const floSaveVideo = (existing_save_arr) => {
     //Toma la información del video y el tiempo para almacenarlo
     const video_id = document.location.search.match("playing=([0-9]+)")[1];
     const saved_time =
@@ -38,10 +36,10 @@ const floSaveVideo = () => {
 
     //añmacena en el local storage
     let video_arr = [];
-    const existing_save_arr = localStorage.getItem("nico_flo_saves");
+    const existing_save = localStorage.getItem("nico_flo_saves");
 
-    if (existing_save_arr) {
-        overwriteExistingVideo(existing_save_arr, save_obj);
+    if (existing_save) {
+        overwriteExistingVideo(existing_save, save_obj);
     } else {
         video_arr = [save_obj];
         return localStorage.setItem("nico_flo_saves", JSON.stringify(video_arr));
@@ -62,32 +60,33 @@ const floVideoManager = () => {
     const video_id = document.location.search.match("playing=([0-9]+)")[1];
     if (!video_id) return false;
 
-    const existing_save_arr = localStorage.getItem("nico_flo_saves");
-    if (!existing_save_arr) {
+    const existing_save = localStorage.getItem("nico_flo_saves");
+    if (!existing_save) {
         console.log("no existe un save flograppling");
-        floSaveVideo();
     } else {
-        const saved_arr = JSON.parse(existing_save_arr);
+        const saved_arr = JSON.parse(existing_save);
         const saved_index = saved_arr.find((i) => i.vid === video_id);
         if (saved_index) {
-            const video_time = saved_index.time;
-            const video_time_split = video_time.split(":"); // split it at the colons
-            const toSeconds =
-                parseInt(video_time_split[0]) * 60 * 60 +
-                parseInt(video_time_split[1]) * 60 +
-                parseInt(video_time_split[2]);
             const videoPlayer = document.querySelector("video");
             if (videoPlayer) {
-                videoPlayer.currentTime = toSeconds;
-                return true;
+                const getVideoTime = () => {
+                    const video_time = saved_index.time;
+                    const video_time_split = video_time.split(":"); // split it at the colons
+                    const toSeconds =
+                        parseInt(video_time_split[0]) * 60 * 60 +
+                        parseInt(video_time_split[1]) * 60 +
+                        parseInt(video_time_split[2]);
+                    return toSeconds;
+                };
+                videoPlayer.currentTime = getVideoTime();
             } else {
                 console.log("no se encuentra el video player aún");
                 return false;
             }
-            console.log("no existe un save para este video");
-            return false;
         }
     }
+    //If the video is found, it will start the save video function
+    saveVideoRealTime(existing_save);
 };
 
 floVideoManager();

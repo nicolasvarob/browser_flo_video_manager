@@ -1,18 +1,33 @@
 <html>
+<style>
+    .container {
+        width: 100px;
+        height: 100px;
+    }
+    
+    img {
+        max-width: 100%;
+        max-height: 100%;
+    }
+</style>
 
 <body>
-    <div>
-        <h1>Test</h1>
-        <img id="plugin-status" width="120px" height="100px" />
+    <div class="container">
+        <h1>Test2</h1>
+        <img id="plugin-status" />
+        <img id="test-status" src="assets/flo-inactive-img.png" />
+
     </div>
 </body>
 <script>
-    var img = document.getElementById('plugin-status');
-    var img_src = window.location.hostname == "www.flograppling.com" ? "assets/flo_active.png" : "assets/flo_inactive.png";
-    var img_alt = window.location.hostname == "www.flograppling.com" ? "Flograppling active" : "Flograppling inactive";
+    document.addEventListener('locationchange', function() {
+        var img = document.getElementById('plugin-status');
+        var img_src = window.location.hostname == "www.flograppling.com " ? "assets/ext-icon.png" : "assets/flo-inactive-img.png";
+        var img_alt = window.location.hostname == "www.flograppling.com " ? "Flograppling active" : "Flograppling inactive";
 
-    img.src = img_src;
-    img.alt = img_alt;
+        img.src = img_src;
+        img.alt = img_alt;
+    });
 </script>
 
 
